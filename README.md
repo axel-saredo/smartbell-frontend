@@ -7,6 +7,6 @@ ng server --open
 
 # Run backend
 
-cd backend
-npm run start:server
+* cd backend
+* npm run start:server
 
