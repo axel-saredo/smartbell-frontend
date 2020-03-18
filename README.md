@@ -4,9 +4,3 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 # Run frontend
 * ng server --open
-
-# Run backend
-
-* cd backend
-* npm run start:server
-
