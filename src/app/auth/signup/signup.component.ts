@@ -3,6 +3,7 @@ import { NgForm } from "@angular/forms";
 
 import { AuthService } from "../auth.service";
 import { Subscription } from "rxjs";
+import { UserData } from "../user-data.model";
 
 @Component({
   templateUrl: "./signup.component.html",
@@ -10,6 +11,7 @@ import { Subscription } from "rxjs";
 })
 export class SignupComponent implements OnInit, OnDestroy {
   isLoading = false;
+  isChecked = false;
   private authStatus: Subscription;
 
   constructor(public authService: AuthService) {}
@@ -27,7 +29,19 @@ export class SignupComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
-    this.authService.createUser(form.value.email, form.value.password);
+
+    const user: UserData = {
+      firstName: form.value.firstName,
+      lastName: form.value.lastName,
+      email: form.value.email,
+      password: form.value.password
+    };
+
+    this.authService.createUser(user);
+  }
+
+  toggle(isChecked: boolean) {
+    this.isChecked = !isChecked;
   }
 
   ngOnDestroy(): void {
