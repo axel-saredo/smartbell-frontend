@@ -35,17 +35,8 @@ export class AuthService {
   }
 
   createUser(user: UserData) {
-    const userData: UserData = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      password: user.password,
-      coachData: {
-        displayName: user.coachData.displayName
-      }
-    };
     return this.http
-      .post(BACKEND_URL + "/signup", userData, { responseType: "text" })
+      .post(BACKEND_URL + "/signup", user, { responseType: "text" })
       .subscribe(
         () => {
           this.router.navigate(["/auth/login"]);
@@ -80,7 +71,6 @@ export class AuthService {
           }
         },
         error => {
-          console.log(error);
           this.authStatusListener.next(false);
         }
       );
