@@ -4,6 +4,7 @@ import { NgForm } from "@angular/forms";
 import { AuthService } from "../auth.service";
 import { Subscription } from "rxjs";
 import { UserData } from "../user-data.model";
+import { CoachData } from "../coach-data.model";
 
 @Component({
   templateUrl: "./signup.component.html",
@@ -30,9 +31,10 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
     this.isLoading = true;
 
-    const coachData = {
+    const coachData: CoachData = {
       displayName: form.value.displayName
     };
+
     const coachDataExists = Boolean(form.value.displayName);
 
     const user: UserData = {
@@ -40,8 +42,9 @@ export class SignupComponent implements OnInit, OnDestroy {
       lastName: form.value.lastName,
       email: form.value.email,
       password: form.value.password,
-      coachData: coachDataExists ? coachData : undefined
+      coachData: coachDataExists ? coachData : { displayName: "" }
     };
+
     this.authService.createUser(user);
   }
 

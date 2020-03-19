@@ -10,3 +10,8 @@ mat-spinner {
   margin-bottom: 1%;
   margin-top: 1%;
 }
+
+button.mat-raised-button {
+  background: #ff4848;
+  color: white;
+}

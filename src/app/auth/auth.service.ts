@@ -13,7 +13,6 @@ const BACKEND_URL = environment.authUrl;
 export class AuthService {
   private isAuthenticated = false;
   private token: string;
-  private tokenTimer: any;
   private userId: string;
   private authStatusListener = new Subject<boolean>();
 
@@ -102,7 +101,6 @@ export class AuthService {
     this.token = null;
     this.isAuthenticated = false;
     this.authStatusListener.next(false);
-    clearTimeout(this.tokenTimer);
     this.clearAuthData();
     this.userId = null;
     this.router.navigate(["/"]);

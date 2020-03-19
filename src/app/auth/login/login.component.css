@@ -5,3 +5,8 @@ mat-form-field {
 mat-spinner {
   margin: auto;
 }
+
+button.mat-raised-button {
+  background: #ff4848;
+  color: white;
+}

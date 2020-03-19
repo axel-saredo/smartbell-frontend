@@ -15,3 +15,7 @@ a {
 ul {
   display: flex;
 }
+
+.mat-toolbar.mat-primary {
+  background: #ce2323;
+}

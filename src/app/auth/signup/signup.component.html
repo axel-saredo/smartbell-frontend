@@ -59,21 +59,18 @@
         lastName
       />
     </mat-form-field>
-
-    <div class="coach-form" *ngIf="isChecked">
-      <mat-form-field>
-        <input
-          matInput
-          name="displayName"
-          ngModel
-          type="text"
-          placeholder="Nombre de coach/gimnasio"
-          #lastNameInput="ngModel"
-          required
-          displayName
-        />
-      </mat-form-field>
-    </div>
+    <mat-form-field *ngIf="isChecked">
+      <input
+        matInput
+        name="displayName"
+        ngModel
+        type="text"
+        placeholder="Nombre de coach/gimnasio"
+        #displayNameInput="ngModel"
+        required
+        displayName
+      />
+    </mat-form-field>
     <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">
       Registrarse
     </button>
