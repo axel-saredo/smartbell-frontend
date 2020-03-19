@@ -73,6 +73,9 @@ export class AuthService {
             this.authStatusListener.next(true);
 
             this.saveAuthData(token, this.userId);
+
+            // TODO: Redirect user to home after logged in.
+
             // this.router.navigate(["/"]);
             console.log("LOGIN WORKED");
           }
