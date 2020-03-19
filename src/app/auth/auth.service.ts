@@ -40,7 +40,10 @@ export class AuthService {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      password: user.password
+      password: user.password,
+      coachData: {
+        displayName: user.coachData.displayName
+      }
     };
     return this.http
       .post(BACKEND_URL + "/signup", userData, { responseType: "text" })
@@ -49,22 +52,17 @@ export class AuthService {
           this.router.navigate(["/auth/login"]);
         },
         error => {
-          console.log(error);
           this.authStatusListener.next(false);
         }
       );
   }
 
-  login(user: UserData) {
-    const userData: UserData = {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      password: user.password
-    };
-
+  login(email: string, password: string) {
     this.http
-      .post<{ token: string; userId: string }>(BACKEND_URL + "/login", userData)
+      .post<{ token: string; userId: string }>(BACKEND_URL + "/login", {
+        email: email,
+        password: password
+      })
       .subscribe(
         response => {
           const token = response.token;

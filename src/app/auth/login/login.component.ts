@@ -3,7 +3,6 @@ import { NgForm } from "@angular/forms";
 
 import { AuthService } from "../auth.service";
 import { Subscription } from "rxjs";
-import { UserData } from "../user-data.model";
 
 @Component({
   templateUrl: "./login.component.html",
@@ -26,14 +25,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (form.invalid) {
       return;
     }
-    const user: UserData = {
-      firstName: form.value.firstName,
-      lastName: form.value.lastName,
-      email: form.value.email,
-      password: form.value.password
-    };
+
     this.isLoading = true;
-    this.authService.login(user);
+    this.authService.login(form.value.email, form.value.password);
   }
 
   ngOnDestroy(): void {

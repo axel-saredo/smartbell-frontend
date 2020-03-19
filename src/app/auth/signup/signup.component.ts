@@ -30,17 +30,22 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
     this.isLoading = true;
 
+    const coachData = {
+      displayName: form.value.displayName
+    };
+    const coachDataExists = Boolean(form.value.displayName);
+
     const user: UserData = {
       firstName: form.value.firstName,
       lastName: form.value.lastName,
       email: form.value.email,
-      password: form.value.password
+      password: form.value.password,
+      coachData: coachDataExists ? coachData : undefined
     };
-
     this.authService.createUser(user);
   }
 
-  toggle(isChecked: boolean) {
+  onToggle(isChecked: boolean) {
     this.isChecked = !isChecked;
   }
 
