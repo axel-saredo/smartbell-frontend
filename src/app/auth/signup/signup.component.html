@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <mat-spinner class="spinner" *ngIf="isLoading"></mat-spinner>
   <form (submit)="onSignup(signupForm)" #signupForm="ngForm" *ngIf="!isLoading">
     <mat-form-field>
       <input
@@ -7,13 +7,13 @@
         name="email"
         ngModel
         type="email"
-        placeholder="E-Mail"
+        placeholder="Direccion de correo electronico"
         #emailInput="ngModel"
         required
         email
       />
       <mat-error *ngIf="emailInput.invalid"
-        >Please enter a valid email.</mat-error
+        >Ingresa una direccion de correo electronico valida</mat-error
       >
     </mat-form-field>
     <mat-form-field>
@@ -22,16 +22,59 @@
         name="password"
         ngModel
         matInput
-        placeholder="Password"
+        placeholder="Contraseña"
         #passwordInput="ngModel"
         required
       />
       <mat-error *ngIf="passwordInput.invalid"
-        >Please enter a valid password.</mat-error
+        >Ingresa una contraseña valida</mat-error
       >
     </mat-form-field>
+
+    <div class="checkbox-container">
+      <mat-checkbox (click)="onToggle(isChecked)" name="isCoach"
+        >Soy coach</mat-checkbox
+      >
+    </div>
+
+    <mat-form-field *ngIf="!isChecked">
+      <input
+        matInput
+        name="firstName"
+        ngModel
+        type="text"
+        placeholder="Nombre"
+        #firstNameInput="ngModel"
+        required
+        firstName
+      />
+    </mat-form-field>
+    <mat-form-field *ngIf="!isChecked">
+      <input
+        matInput
+        name="lastName"
+        ngModel
+        type="text"
+        placeholder="Apellido"
+        #lastNameInput="ngModel"
+        required
+        lastName
+      />
+    </mat-form-field>
+    <mat-form-field *ngIf="isChecked">
+      <input
+        matInput
+        name="displayName"
+        ngModel
+        type="text"
+        placeholder="Nombre de coach/gimnasio"
+        #displayNameInput="ngModel"
+        required
+        displayName
+      />
+    </mat-form-field>
     <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">
-      Signup
+      Registrarse
     </button>
   </form>
 </mat-card>

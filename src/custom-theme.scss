@@ -11,20 +11,20 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$my-messages-primary: mat-palette($mat-indigo);
-$my-messages-accent: mat-palette($mat-pink, A200, A100, A400);
+$smartbell-frontend-primary: mat-palette($mat-indigo);
+$smartbell-frontend-accent: mat-palette($mat-pink, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$my-messages-warn: mat-palette($mat-red);
+$smartbell-frontend-warn: mat-palette($mat-red);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$my-messages-theme: mat-light-theme(
-  $my-messages-primary,
-  $my-messages-accent,
-  $my-messages-warn
+$smartbell-frontend-theme: mat-light-theme(
+  $smartbell-frontend-primary,
+  $smartbell-frontend-accent,
+  $smartbell-frontend-warn
 );
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($my-messages-theme);
+@include angular-material-theme($smartbell-frontend-theme);

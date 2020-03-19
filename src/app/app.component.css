@@ -1,4 +1,23 @@
 main {
   width: 80%;
-  margin: 1rem auto;
+  margin: 3rem auto;
+}
+
+::ng-deep .mat-checkbox-checked .mat-checkbox-background,
+.mat-checkbox-indeterminate .mat-checkbox-background {
+  background-color: #ff4848 !important;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: black !important;
+}
+
+::ng-deep.mat-form-field-ripple {
+  /*change color of underline when focused*/
+  background-color: black !important;
+}
+
+* {
+  font-family: "Teko", sans-serif;
 }
