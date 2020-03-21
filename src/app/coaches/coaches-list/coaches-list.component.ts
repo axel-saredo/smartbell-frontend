@@ -19,6 +19,7 @@ export class CoachesListComponent implements OnInit, OnDestroy {
   pageSizeOptions = [1, 2, 5, 10];
   userIsAuthenticated = false;
   userId: string;
+
   private coachesSub: Subscription;
   private authStatusSub: Subscription;
 

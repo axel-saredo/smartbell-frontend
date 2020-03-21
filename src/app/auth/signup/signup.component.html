@@ -88,6 +88,30 @@
         >Completa este campo</mat-error
       >
     </mat-form-field>
+    <mat-form-field *ngIf="isChecked">
+      <input
+        matInput
+        formControlName="cbu"
+        name="cbu"
+        type="text"
+        placeholder="Agrega tu CBU para recibir los pagos de tus clientes"
+      />
+      <mat-error *ngIf="form.get('cbu').invalid">Completa este campo</mat-error>
+    </mat-form-field>
+    <mat-form-field *ngIf="isChecked">
+      <textarea
+        matInput
+        formControlName="description"
+        name="description"
+        placeholder="Escribe sobre ti..."
+        rows="4"
+        cols="50"
+      >
+      </textarea>
+      <mat-error *ngIf="form.get('description').invalid"
+        >Completa este campo</mat-error
+      >
+    </mat-form-field>
 
     <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">
       Registrarse
