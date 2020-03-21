@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { FormGroup, FormControl, Validators } from "@angular/forms";
 
-import { AuthService } from '../auth.service';
-import { Subscription } from 'rxjs';
-import { UserData } from '../user-data.model';
-import { CoachData } from '../coach-data.model';
-import { mimeType } from 'src/app/utils/mime-type.validator';
+import { AuthService } from "../auth.service";
+import { Subscription } from "rxjs";
+import { UserData } from "../user-data.model";
+import { CoachData } from "../coach-data.model";
+import { mimeType } from "src/app/utils/mime-type.validator";
 
 @Component({
-  templateUrl: './signup.component.html',
-  styleUrls  : ['./signup.component.css'],
+  templateUrl: "./signup.component.html",
+  styleUrls: ["./signup.component.css"]
 })
 export class SignupComponent implements OnInit, OnDestroy {
   isLoading = false;
@@ -22,12 +22,6 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   imagePreview: string;
 
-  firstNameIsInvalid: boolean;
-
-  lastNameIsInvalid: boolean;
-
-  displayNameIsInvalid: boolean;
-
   private authStatus: Subscription;
 
   constructor(public authService: AuthService) {}
@@ -35,7 +29,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authStatus = this.authService
       .getAuthStatusListener()
-      .subscribe((authStatus) => {
+      .subscribe(authStatus => {
         this.isLoading = false;
       });
     this.buildForm();
@@ -44,18 +38,20 @@ export class SignupComponent implements OnInit, OnDestroy {
   private buildForm() {
     this.form = new FormGroup({
       email: new FormControl(null, {
-        validators: [Validators.required, Validators.email],
+        validators: [Validators.required, Validators.email]
       }),
       password: new FormControl(null, {
-        validators: [Validators.required],
+        validators: [Validators.required]
       }),
-      firstName  : new FormControl(),
-      lastName   : new FormControl(),
+      firstName: new FormControl(),
+      lastName: new FormControl(),
       displayName: new FormControl(),
-      isCoach    : new FormControl(),
-      image      : new FormControl({
-        asyncValidators: mimeType,
+      isCoach: new FormControl(),
+      image: new FormControl({
+        asyncValidators: mimeType
       }),
+      cbu: new FormControl(),
+      description: new FormControl()
     });
   }
 
@@ -67,47 +63,65 @@ export class SignupComponent implements OnInit, OnDestroy {
 
       const coachData: CoachData = {
         displayName: this.form.value.displayName,
+        cbu: this.form.value.cbu,
+        description: this.form.value.description
       };
 
       const coachDataExists = this.isChecked;
 
       const user: UserData = {
         firstName: this.form.value.firstName,
-        lastName : this.form.value.lastName,
-        email    : this.form.value.email,
-        password : this.form.value.password,
-        coachData: coachDataExists ? coachData : undefined,
+        lastName: this.form.value.lastName,
+        email: this.form.value.email,
+        password: this.form.value.password,
+        coachData: coachDataExists ? coachData : undefined
       };
 
       this.authService.createUser(user);
     }
   }
 
-  validateForm() {
+  private validateForm() {
     const isCoach = this.form.value.isCoach;
+
     if (isCoach) {
-      const displayName = this.form.get('displayName');
-      this.displayNameIsInvalid =
-        displayName.value === '' || typeof displayName.value !== 'string';
-      if (this.displayNameIsInvalid) {
+      const displayName = this.form.get("displayName");
+      const cbu = this.form.get("cbu");
+      const description = this.form.get("description");
+
+      const displayNameIsInvalid =
+        displayName.value === "" || typeof displayName.value !== "string";
+
+      const cbuIsInvalid = cbu.value === "" || typeof cbu.value !== "string";
+
+      const descriptionIsInvalid =
+        description.value === "" || typeof description.value !== "string";
+
+      if (displayNameIsInvalid || cbuIsInvalid || descriptionIsInvalid) {
         displayName.setErrors({
-          invalid: true,
+          invalid: true
+        });
+        cbu.setErrors({
+          invalid: true
+        });
+        description.setErrors({
+          invalid: true
         });
 
         return false;
       }
     } else {
-      const firstName = this.form.get('firstName');
-      const lastName = this.form.get('lastName');
+      const firstName = this.form.get("firstName");
+      const lastName = this.form.get("lastName");
 
-      this.firstNameIsInvalid =
-        firstName.value === '' || typeof firstName.value !== 'string';
-      this.lastNameIsInvalid =
-        lastName.value === '' || typeof lastName.value !== 'string';
+      const firstNameIsInvalid =
+        firstName.value === "" || typeof firstName.value !== "string";
+      const lastNameIsInvalid =
+        lastName.value === "" || typeof lastName.value !== "string";
 
-      if (this.firstNameIsInvalid || this.lastNameIsInvalid) {
-        firstName.setErrors({ invalid: true, });
-        lastName.setErrors({ invalid: true, });
+      if (firstNameIsInvalid || lastNameIsInvalid) {
+        firstName.setErrors({ invalid: true });
+        lastName.setErrors({ invalid: true });
 
         return false;
       }
@@ -118,8 +132,8 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   onImagePicked(event: Event) {
     const file = (event.target as HTMLInputElement).files[0];
-    this.form.patchValue({ image: file, });
-    this.form.get('image').updateValueAndValidity();
+    this.form.patchValue({ image: file });
+    this.form.get("image").updateValueAndValidity();
     const reader = new FileReader();
     reader.onload = () => {
       if (file.size > 2000000) {

@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
+import { Subject } from "rxjs";
 
-import { UserData } from './user-data.model';
+import { UserData } from "./user-data.model";
 
-import { environment } from '../../environments/environment';
+import { environment } from "../../environments/environment";
 
 const BACKEND_URL = environment.authUrl;
 const BACKEND_API = environment.apiUrl;
 
-@Injectable({ providedIn: 'root', })
+@Injectable({ providedIn: "root" })
 export class AuthService {
   private isAuthenticated = false;
 
@@ -40,13 +40,13 @@ export class AuthService {
 
   createUser(user: UserData) {
     return this.http
-      .post(BACKEND_URL + '/signup', user, { responseType: 'text', })
+      .post(BACKEND_URL + "/signup", user, { responseType: "text" })
       .subscribe(
         () => {
           this.login(user.email, user.password, user.image);
-          this.router.navigate(['/auth/login']);
+          this.router.navigate(["/auth/login"]);
         },
-        (error) => {
+        error => {
           this.authStatusListener.next(false);
         }
       );
@@ -54,12 +54,12 @@ export class AuthService {
 
   login(email: string, password: string, image?: File) {
     this.http
-      .post<any>(BACKEND_URL + '/login', {
+      .post<any>(BACKEND_URL + "/login", {
         email,
-        password,
+        password
       })
       .subscribe(
-        (response) => {
+        response => {
           const token = response.token;
           this.token = token;
           if (token) {
@@ -69,15 +69,15 @@ export class AuthService {
 
             this.saveAuthData(token, this.userId);
             const userData = new FormData();
-            userData.append('file', image);
+            userData.append("file", image);
             this.http.put<any>(
-              BACKEND_API + '/files/profile-picture/' + this.userId,
+              BACKEND_API + "/files/profile-picture/" + this.userId,
               image
             );
-            this.router.navigate(['/']);
+            this.router.navigate(["/"]);
           }
         },
-        (error) => {
+        error => {
           this.authStatusListener.next(false);
         }
       );
@@ -100,28 +100,28 @@ export class AuthService {
     this.authStatusListener.next(false);
     this.clearAuthData();
     this.userId = null;
-    this.router.navigate(['/']);
+    this.router.navigate(["/"]);
   }
 
   private saveAuthData(token: string, userId: string) {
-    localStorage.setItem('token', token);
-    localStorage.setItem('userId', userId);
+    localStorage.setItem("token", token);
+    localStorage.setItem("userId", userId);
   }
 
   private clearAuthData() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
   }
 
   private getAuthData() {
-    const token = localStorage.getItem('token');
-    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
     if (!token) {
       return;
     }
     return {
       token,
-      userId,
+      userId
     };
   }
 }
