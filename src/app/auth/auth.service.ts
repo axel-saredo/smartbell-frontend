@@ -41,6 +41,7 @@ export class AuthService {
       .subscribe(
         () => {
           this.login(user.email, user.password, user.image);
+          debugger;
           this.router.navigate(["/auth/login"]);
         },
         error => {
@@ -75,7 +76,6 @@ export class AuthService {
           }
         },
         error => {
-          console.log(error);
           this.authStatusListener.next(false);
         }
       );

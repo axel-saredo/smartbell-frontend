@@ -7,7 +7,8 @@ import { Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { Coach } from "./coach.model";
 
-const BACKEND_URL = environment.apiUrl + "/coach";
+const BACKEND_AUTH = environment.authUrl;
+const BACKEND_API = environment.apiUrl;
 
 @Injectable({ providedIn: "root" })
 export class CoachesService {
@@ -22,7 +23,7 @@ export class CoachesService {
   getCoaches(coachesPerPage: number) {
     const queryParams = `?limit=${coachesPerPage}`;
     this.http
-      .get<{ count: number; rows: any[] }>(BACKEND_URL + queryParams)
+      .get<{ count: number; rows: any[] }>(BACKEND_API + "/coach" + queryParams)
       .pipe(
         map(coachesData => {
           return {
@@ -52,7 +53,7 @@ export class CoachesService {
   }
 
   getCoach(id: string) {
-    return this.http.get<any>(BACKEND_URL + id);
+    return this.http.get<any>(BACKEND_AUTH + id);
   }
 
   // addPost(title: string, content: string, image: File) {

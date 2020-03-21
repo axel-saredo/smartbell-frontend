@@ -28,7 +28,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       });
     this.buildForm();
-    this.setValidatorsForNames();
   }
 
   private buildForm() {
@@ -39,58 +38,70 @@ export class SignupComponent implements OnInit, OnDestroy {
       password: new FormControl(null, {
         validators: [Validators.required]
       }),
-      firstName: new FormControl(null, { validators: [Validators.required] }),
-      lastName: new FormControl(null, { validators: [Validators.required] }),
-      displayName: new FormControl(null),
+      firstName: new FormControl(),
+      lastName: new FormControl(),
+      displayName: new FormControl(),
       isCoach: new FormControl(),
-      image: new FormControl(null, {
-        validators: [Validators.required],
+      image: new FormControl({
         asyncValidators: mimeType
       })
     });
   }
 
-  private setValidatorsForNames() {
-    const displayName = this.form.get("displayName");
-    const firstName = this.form.get("firstName");
-    const lastName = this.form.get("lastName");
+  onSignup() {
+    const isValid = this.validateForm();
 
-    this.form.get("isCoach").valueChanges.subscribe(isCoach => {
-      if (!!isCoach) {
-        displayName.setValidators([Validators.required]);
-        firstName.setValidators(null);
-        lastName.setValidators(null);
-      } else {
-        displayName.setValidators(null);
-      }
+    if (isValid) {
+      this.isLoading = true;
 
-      displayName.updateValueAndValidity();
-      firstName.updateValueAndValidity();
-      lastName.updateValueAndValidity();
-    });
+      const coachData: CoachData = {
+        displayName: this.form.value.displayName
+      };
+
+      const coachDataExists = this.isChecked;
+
+      const user: UserData = {
+        firstName: this.form.value.firstName,
+        lastName: this.form.value.lastName,
+        email: this.form.value.email,
+        password: this.form.value.password,
+        coachData: coachDataExists ? coachData : undefined
+      };
+      this.authService.createUser(user);
+    }
   }
 
-  onSignup() {
-    if (this.form.invalid) {
-      return;
+  validateForm() {
+    const isCoach = this.form.value.isCoach;
+    debugger;
+    if (isCoach) {
+      const displayName = this.form.get("displayName");
+      if (displayName.value === "") {
+        displayName.setErrors({
+          message: "Por favor completa este campo",
+          incorrect: true
+        });
+
+        return false;
+      }
+    } else {
+      const firstName = this.form.get("firstName");
+      const lastName = this.form.get("lastName");
+
+      const firstNameIsInvalid =
+        firstName.value === "" || typeof firstName.value !== "string";
+      const lastNameIsInvalid =
+        lastName.value === "" || typeof lastName.value !== "string";
+
+      if (firstNameIsInvalid || lastNameIsInvalid) {
+        firstName.setErrors({ message: "Por favor completa este campo" });
+        lastName.setErrors({ message: "Por favor completa este campo" });
+
+        return false;
+      }
     }
-    this.isLoading = true;
 
-    const coachData: CoachData = {
-      displayName: this.form.value.displayName
-    };
-
-    const coachDataExists = this.isChecked;
-
-    const user: UserData = {
-      firstName: this.form.value.firstName,
-      lastName: this.form.value.lastName,
-      email: this.form.value.email,
-      password: this.form.value.password,
-      coachData: coachDataExists ? coachData : undefined
-    };
-
-    this.authService.createUser(user);
+    return true;
   }
 
   onImagePicked(event: Event) {
