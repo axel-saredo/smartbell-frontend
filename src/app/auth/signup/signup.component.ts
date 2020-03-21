@@ -17,6 +17,9 @@ export class SignupComponent implements OnInit, OnDestroy {
   form: FormGroup;
   fileIsTooBig = false;
   imagePreview: string;
+  firstNameIsInvalid: Boolean;
+  lastNameIsInvalid: Boolean;
+  displayNameIsInvalid: Boolean;
   private authStatus: Subscription;
 
   constructor(public authService: AuthService) {}
@@ -67,6 +70,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         password: this.form.value.password,
         coachData: coachDataExists ? coachData : undefined
       };
+
       this.authService.createUser(user);
     }
   }
@@ -76,10 +80,11 @@ export class SignupComponent implements OnInit, OnDestroy {
     debugger;
     if (isCoach) {
       const displayName = this.form.get("displayName");
-      if (displayName.value === "") {
+      this.displayNameIsInvalid =
+        displayName.value === "" || typeof displayName.value !== "string";
+      if (this.displayNameIsInvalid) {
         displayName.setErrors({
-          message: "Por favor completa este campo",
-          incorrect: true
+          invalid: true
         });
 
         return false;
@@ -88,14 +93,14 @@ export class SignupComponent implements OnInit, OnDestroy {
       const firstName = this.form.get("firstName");
       const lastName = this.form.get("lastName");
 
-      const firstNameIsInvalid =
+      this.firstNameIsInvalid =
         firstName.value === "" || typeof firstName.value !== "string";
-      const lastNameIsInvalid =
+      this.lastNameIsInvalid =
         lastName.value === "" || typeof lastName.value !== "string";
 
-      if (firstNameIsInvalid || lastNameIsInvalid) {
-        firstName.setErrors({ message: "Por favor completa este campo" });
-        lastName.setErrors({ message: "Por favor completa este campo" });
+      if (this.firstNameIsInvalid || this.lastNameIsInvalid) {
+        firstName.setErrors({ invalid: true });
+        lastName.setErrors({ invalid: true });
 
         return false;
       }

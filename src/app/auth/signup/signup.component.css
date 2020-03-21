@@ -18,6 +18,7 @@ mat-spinner {
 button.mat-raised-button {
   background: #ff4848;
   color: white;
+  margin-top: 1%;
 }
 
 button.mat-fab {

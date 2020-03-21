@@ -58,7 +58,11 @@
         type="text"
         placeholder="Nombre"
       />
+      <mat-error *ngIf="form.get('firstName').invalid"
+        >Completa este campo</mat-error
+      >
     </mat-form-field>
+
     <mat-form-field *ngIf="!isChecked">
       <input
         matInput
@@ -67,6 +71,9 @@
         type="text"
         placeholder="Apellido"
       />
+      <mat-error *ngIf="form.get('lastName').invalid"
+        >Completa este campo</mat-error
+      >
     </mat-form-field>
 
     <mat-form-field *ngIf="isChecked">
@@ -77,7 +84,11 @@
         type="text"
         placeholder="Nombre de coach/gimnasio"
       />
+      <mat-error *ngIf="form.get('displayName').invalid"
+        >Completa este campo</mat-error
+      >
     </mat-form-field>
+
     <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">
       Registrarse
     </button>
