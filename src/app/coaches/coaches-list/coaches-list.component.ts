@@ -1,25 +1,34 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Subscription } from "rxjs";
-import { CoachesService } from "../coaches.service";
-import { PageEvent } from "@angular/material/paginator";
-import { AuthService } from "src/app/auth/auth.service";
-import { Coach } from "../coach.model";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { CoachesService } from '../coaches.service';
+import { PageEvent } from '@angular/material/paginator';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Coach } from '../coach.model';
 
 @Component({
-  selector: "app-coach-list",
-  templateUrl: "./coaches-list.component.html",
-  styleUrls: ["./coaches-list.component.css"]
+  selector   : 'app-coach-list',
+  templateUrl: './coaches-list.component.html',
+  styleUrls  : ['./coaches-list.component.css'],
 })
 export class CoachesListComponent implements OnInit, OnDestroy {
   coaches: Coach[] = [];
+
   isLoading = false;
+
   totalCoaches = 0;
+
   coachesPerPage = 50;
+
   currentPage = 1;
+
   pageSizeOptions = [1, 2, 5, 10];
+
   userIsAuthenticated = false;
+
   userId: string;
+
   private coachesSub: Subscription;
+
   private authStatusSub: Subscription;
 
   constructor(
@@ -29,7 +38,7 @@ export class CoachesListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.coachesService.getCoaches(this.coachesPerPage);
+    this.coachesService.getCoaches(this.coachesPerPage, this.currentPage);
     this.userId = this.authService.getUserId();
     this.coachesSub = this.coachesService
       .getCoachUpdateListener()
@@ -41,7 +50,7 @@ export class CoachesListComponent implements OnInit, OnDestroy {
     this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService
       .getAuthStatusListener()
-      .subscribe(isAuthenticated => {
+      .subscribe((isAuthenticated) => {
         this.userIsAuthenticated = isAuthenticated;
         this.userId = this.authService.getUserId();
       });
@@ -51,20 +60,8 @@ export class CoachesListComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.currentPage = pageData.pageIndex + 1;
     this.coachesPerPage = pageData.pageSize;
-    this.coachesService.getCoaches(this.coachesPerPage);
+    this.coachesService.getCoaches(this.coachesPerPage, this.currentPage);
   }
-
-  // onDelete(postId: string) {
-  //   this.isLoading = true;
-  //   this.coachesService.deletePost(postId).subscribe(
-  //     () => {
-  //       this.coachesService.getPosts(this.postsPerPage, this.currentPage);
-  //     },
-  //     () => {
-  //       this.isLoading = false;
-  //     }
-  //   );
-  // }
 
   ngOnDestroy(): void {
     this.coachesSub.unsubscribe();
