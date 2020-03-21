@@ -1,13 +1,13 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
-import { PostListComponent } from "./posts/post-list/post-list.component";
-import { PostCreateComponent } from "./posts/post-create/post-create.component";
+import { PostCreateComponent } from "./coaches/post-create/post-create.component";
 
 import { AuthGuard } from "./auth/auth.guard";
+import { CoachesListComponent } from "./coaches/coaches-list/coaches-list.component";
 
 const routes: Routes = [
-  { path: "", component: PostListComponent },
+  { path: "", component: CoachesListComponent },
   { path: "create", component: PostCreateComponent, canActivate: [AuthGuard] },
   {
     path: "edit/:postId",

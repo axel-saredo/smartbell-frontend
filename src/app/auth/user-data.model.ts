@@ -5,5 +5,6 @@ export interface UserData {
   lastName: string;
   email: string;
   password: string;
+  image?: File;
   coachData?: CoachData;
 }

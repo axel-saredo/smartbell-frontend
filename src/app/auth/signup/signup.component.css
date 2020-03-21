@@ -19,3 +19,19 @@ button.mat-raised-button {
   background: #ff4848;
   color: white;
 }
+
+button.mat-fab {
+  background-image: url("../../assets/camera.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: transparent;
+  color: white;
+  width: 10rem;
+  height: 10rem;
+  display: block;
+  margin: 0 auto;
+}
+
+input[type="file"] {
+  visibility: hidden;
+}

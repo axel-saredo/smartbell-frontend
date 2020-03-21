@@ -1,38 +1,51 @@
 <mat-card>
-  <mat-spinner class="spinner" *ngIf="isLoading"></mat-spinner>
-  <form (submit)="onSignup(signupForm)" #signupForm="ngForm" *ngIf="!isLoading">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form [formGroup]="form" (submit)="onSignup()" *ngIf="!isLoading">
+    <button
+      type="button"
+      mat-fab
+      (click)="filePicker.click()"
+      [style.backgroundImage]="
+        imagePreview !== '' &&
+        imagePreview &&
+        form.get('image').valid &&
+        'url(' + imagePreview + ')'
+      "
+    ></button>
+    <input type="file" #filePicker (change)="onImagePicked($event)" />
+
     <mat-form-field>
       <input
         matInput
+        formControlName="email"
         name="email"
-        ngModel
         type="email"
         placeholder="Direccion de correo electronico"
-        #emailInput="ngModel"
-        required
-        email
       />
-      <mat-error *ngIf="emailInput.invalid"
+      <mat-error *ngIf="form.get('email').invalid"
         >Ingresa una direccion de correo electronico valida</mat-error
       >
     </mat-form-field>
+
     <mat-form-field>
       <input
-        type="password"
-        name="password"
-        ngModel
         matInput
+        formControlName="password"
+        name="password"
+        type="password"
         placeholder="Contraseña"
-        #passwordInput="ngModel"
-        required
       />
-      <mat-error *ngIf="passwordInput.invalid"
-        >Ingresa una contraseña valida</mat-error
+      <mat-error *ngIf="form.get('password').invalid"
+        >Ingresa una contraseña</mat-error
       >
     </mat-form-field>
 
     <div class="checkbox-container">
-      <mat-checkbox (click)="onToggle(isChecked)" name="isCoach"
+      <mat-checkbox
+        (click)="onToggle(isChecked)"
+        matInput
+        formControlName="isCoach"
+        name="isCoach"
         >Soy coach</mat-checkbox
       >
     </div>
@@ -40,37 +53,29 @@
     <mat-form-field *ngIf="!isChecked">
       <input
         matInput
+        formControlName="firstName"
         name="firstName"
-        ngModel
         type="text"
         placeholder="Nombre"
-        #firstNameInput="ngModel"
-        required
-        firstName
       />
     </mat-form-field>
     <mat-form-field *ngIf="!isChecked">
       <input
         matInput
+        formControlName="lastName"
         name="lastName"
-        ngModel
         type="text"
         placeholder="Apellido"
-        #lastNameInput="ngModel"
-        required
-        lastName
       />
     </mat-form-field>
+
     <mat-form-field *ngIf="isChecked">
       <input
         matInput
+        formControlName="displayName"
         name="displayName"
-        ngModel
         type="text"
         placeholder="Nombre de coach/gimnasio"
-        #displayNameInput="ngModel"
-        required
-        displayName
       />
     </mat-form-field>
     <button mat-raised-button color="accent" type="submit" *ngIf="!isLoading">
