@@ -8,6 +8,7 @@ import { UserData } from "./user-data.model";
 import { environment } from "../../environments/environment";
 
 const BACKEND_URL = environment.authUrl;
+const BACKEND_API = environment.apiUrl;
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
@@ -39,6 +40,8 @@ export class AuthService {
       .post(BACKEND_URL + "/signup", user, { responseType: "text" })
       .subscribe(
         () => {
+          this.login(user.email, user.password, user.image);
+          debugger;
           this.router.navigate(["/auth/login"]);
         },
         error => {
@@ -47,9 +50,9 @@ export class AuthService {
       );
   }
 
-  login(email: string, password: string) {
+  login(email: string, password: string, image?: File) {
     this.http
-      .post<{ token: string; userId: string }>(BACKEND_URL + "/login", {
+      .post<any>(BACKEND_URL + "/login", {
         email: email,
         password: password
       })
@@ -59,15 +62,17 @@ export class AuthService {
           this.token = token;
           if (token) {
             this.isAuthenticated = true;
-            this.userId = response.userId;
+            this.userId = response.user.id;
             this.authStatusListener.next(true);
 
             this.saveAuthData(token, this.userId);
-
-            // TODO: Redirect user to home after logged in.
-
-            // this.router.navigate(["/"]);
-            console.log("LOGIN WORKED");
+            const userData = new FormData();
+            userData.append("file", image);
+            this.http.put<any>(
+              BACKEND_API + "/files/profile-picture/" + this.userId,
+              image
+            );
+            this.router.navigate(["/"]);
           }
         },
         error => {

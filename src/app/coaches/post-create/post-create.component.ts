@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { PostsService } from "../posts.service";
 import { ActivatedRoute, ParamMap } from "@angular/router";
-import { Post } from "../post.model";
+import { Coach } from "../coach.model";
 import { mimeType } from "./mime-type.validator";
 import { Subscription } from "rxjs";
 import { AuthService } from "src/app/auth/auth.service";
+import { CoachesService } from "../coaches.service";
 
 @Component({
   selector: "app-post-create",
@@ -21,10 +21,10 @@ export class PostCreateComponent implements OnInit, OnDestroy {
   private mode = "create";
   private postId: string;
   private authStatusSub: Subscription;
-  public post: Post;
+  public post: Coach;
 
   constructor(
-    public postsService: PostsService,
+    public postsService: CoachesService,
     public route: ActivatedRoute,
     private authService: AuthService
   ) {}
@@ -50,18 +50,15 @@ export class PostCreateComponent implements OnInit, OnDestroy {
         this.mode = "edit";
         this.postId = paramMap.get("postId");
         this.isLoading = true;
-        this.postsService.getPost(this.postId).subscribe(postData => {
+        this.postsService.getCoach(this.postId).subscribe(postData => {
           this.isLoading = false;
           this.post = {
             id: postData._id,
-            title: postData.title,
-            content: postData.content,
-            imagePath: postData.imagePath,
-            creator: postData.creator
+            displayName: "",
+            description: "",
+            imagePath: postData.imagePath
           };
           this.form.setValue({
-            title: this.post.title,
-            content: this.post.content,
             image: this.post.imagePath
           });
         });
@@ -90,20 +87,20 @@ export class PostCreateComponent implements OnInit, OnDestroy {
 
     this.isLoading = true;
 
-    if (this.mode === "create") {
-      this.postsService.addPost(
-        this.form.value.title,
-        this.form.value.content,
-        this.form.value.image
-      );
-    } else {
-      this.postsService.updatePost(
-        this.postId,
-        this.form.value.title,
-        this.form.value.content,
-        this.form.value.image
-      );
-    }
+    // if (this.mode === "create") {
+    //   this.postsService.addPost(
+    //     this.form.value.title,
+    //     this.form.value.content,
+    //     this.form.value.image
+    //   );
+    // } else {
+    //   this.postsService.updatePost(
+    //     this.postId,
+    //     this.form.value.title,
+    //     this.form.value.content,
+    //     this.form.value.image
+    //   );
+    // }
 
     this.form.reset();
   }
