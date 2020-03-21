@@ -17,9 +17,7 @@ export class SignupComponent implements OnInit, OnDestroy {
   form: FormGroup;
   fileIsTooBig = false;
   imagePreview: string;
-  firstNameIsInvalid: Boolean;
-  lastNameIsInvalid: Boolean;
-  displayNameIsInvalid: Boolean;
+
   private authStatus: Subscription;
 
   constructor(public authService: AuthService) {}
@@ -47,7 +45,9 @@ export class SignupComponent implements OnInit, OnDestroy {
       isCoach: new FormControl(),
       image: new FormControl({
         asyncValidators: mimeType
-      })
+      }),
+      cbu: new FormControl(),
+      description: new FormControl()
     });
   }
 
@@ -58,7 +58,9 @@ export class SignupComponent implements OnInit, OnDestroy {
       this.isLoading = true;
 
       const coachData: CoachData = {
-        displayName: this.form.value.displayName
+        displayName: this.form.value.displayName,
+        cbu: this.form.value.cbu,
+        description: this.form.value.description
       };
 
       const coachDataExists = this.isChecked;
@@ -75,15 +77,30 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
   }
 
-  validateForm() {
+  private validateForm() {
     const isCoach = this.form.value.isCoach;
-    debugger;
+
     if (isCoach) {
       const displayName = this.form.get("displayName");
-      this.displayNameIsInvalid =
+      const cbu = this.form.get("cbu");
+      const description = this.form.get("description");
+
+      const displayNameIsInvalid =
         displayName.value === "" || typeof displayName.value !== "string";
-      if (this.displayNameIsInvalid) {
+
+      const cbuIsInvalid = cbu.value === "" || typeof cbu.value !== "string";
+
+      const descriptionIsInvalid =
+        description.value === "" || typeof description.value !== "string";
+
+      if (displayNameIsInvalid || cbuIsInvalid || descriptionIsInvalid) {
         displayName.setErrors({
+          invalid: true
+        });
+        cbu.setErrors({
+          invalid: true
+        });
+        description.setErrors({
           invalid: true
         });
 
@@ -93,12 +110,12 @@ export class SignupComponent implements OnInit, OnDestroy {
       const firstName = this.form.get("firstName");
       const lastName = this.form.get("lastName");
 
-      this.firstNameIsInvalid =
+      const firstNameIsInvalid =
         firstName.value === "" || typeof firstName.value !== "string";
-      this.lastNameIsInvalid =
+      const lastNameIsInvalid =
         lastName.value === "" || typeof lastName.value !== "string";
 
-      if (this.firstNameIsInvalid || this.lastNameIsInvalid) {
+      if (firstNameIsInvalid || lastNameIsInvalid) {
         firstName.setErrors({ invalid: true });
         lastName.setErrors({ invalid: true });
 
