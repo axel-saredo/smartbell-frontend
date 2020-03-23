@@ -73,7 +73,7 @@ export class AuthService {
             const httpOptions = {
               headers: new HttpHeaders({
                 "Content-Type": "image/jpeg",
-                Authorization: token
+                Authorization: `Bearer ${token}`
               })
             };
 
