@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 
@@ -39,12 +39,12 @@ export class AuthService {
   }
 
   createUser(user: UserData) {
+    debugger;
     return this.http
       .post(BACKEND_URL + "/signup", user, { responseType: "text" })
       .subscribe(
         () => {
           this.login(user.email, user.password, user.image);
-          this.router.navigate(["/auth/login"]);
         },
         error => {
           this.authStatusListener.next(false);
@@ -62,18 +62,32 @@ export class AuthService {
         response => {
           const token = response.token;
           this.token = token;
+
           if (token) {
             this.isAuthenticated = true;
             this.userId = response.user.id;
             this.authStatusListener.next(true);
 
             this.saveAuthData(token, this.userId);
+
+            const httpOptions = {
+              headers: new HttpHeaders({
+                "Content-Type": "image/jpeg",
+                Authorization: token
+              })
+            };
+
             const userData = new FormData();
-            userData.append("file", image);
-            this.http.put<any>(
-              BACKEND_API + "/files/profile-picture/" + this.userId,
-              image
-            );
+            userData.append("file", image, image.name);
+
+            this.http
+              .put<any>(
+                BACKEND_API + "/files/profile-picture/" + this.userId,
+                userData,
+                httpOptions
+              )
+              .subscribe(response => console.log("It worked!"));
+
             this.router.navigate(["/"]);
           }
         },

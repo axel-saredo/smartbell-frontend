@@ -74,6 +74,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         lastName: this.form.value.lastName,
         email: this.form.value.email,
         password: this.form.value.password,
+        image: this.form.value.image,
         coachData: coachDataExists ? coachData : undefined
       };
 

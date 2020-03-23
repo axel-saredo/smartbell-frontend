@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Subject } from "rxjs";
+import { map } from "rxjs/operators";
+import { Router } from "@angular/router";
 
-import { environment } from '../../environments/environment';
-import { Coach } from './coach.model';
+import { environment } from "../../environments/environment";
+import { Coach } from "./coach.model";
 
 const BACKEND_AUTH = environment.authUrl;
 const BACKEND_API = environment.apiUrl;
 
-@Injectable({ providedIn: 'root', })
+@Injectable({ providedIn: "root" })
 export class CoachesService {
   private coaches: Coach[] = [];
 
@@ -19,35 +19,39 @@ export class CoachesService {
     coachCount: number;
   }>();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
 
   getCoaches(coachesPerPage: number, page: number) {
     const offset = this.calculateOffset(coachesPerPage, page);
     const queryParams = `?limit=${coachesPerPage}&offset=${offset}`;
     this.http
-      .get<{ count: number; rows: any[] }>(BACKEND_API + '/coach' + queryParams)
+      .get<{ count: number; rows: any[] }>(BACKEND_API + "/coach" + queryParams)
       .pipe(
-        map((coachesData) => {
+        map(coachesData => {
           return {
             coaches: coachesData.rows.map((coach: Coach) => {
               return {
-                id         : coach.id,
+                id: coach.id,
                 displayName: coach.displayName,
                 description: coach.description,
-                imagePath  : coach.imagePath,
+                imagePath: coach.imagePath
               };
             }),
-            maxCoaches: coachesData.count,
+            maxCoaches: coachesData.count
           };
         })
       )
-      .subscribe((transformedCoachData) => {
+      .subscribe(transformedCoachData => {
         this.coaches = transformedCoachData.coaches;
         this.coachesUpdated.next({
-          coaches   : [...this.coaches],
-          coachCount: transformedCoachData.maxCoaches,
+          coaches: [...this.coaches],
+          coachCount: transformedCoachData.maxCoaches
         });
       });
+  }
+
+  getCoachProfilePicture(userId: string, httpOptions: {headers: HttpHeaders}) {
+    return this.http.get<any>(BACKEND_API + "/files/profile-picture/" + userId, httpOptions);
   }
 
   getCoachUpdateListener() {
