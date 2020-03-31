@@ -50,8 +50,18 @@ export class CoachesService {
       });
   }
 
-  getCoachProfilePicture(userId: string, httpOptions: {headers: HttpHeaders}) {
-    return this.http.get<any>(BACKEND_API + "/files/profile-picture/" + userId, httpOptions);
+  getCoachProfile(coachId: string) {
+    return this.http.get<any>(BACKEND_API + "/coach/" + coachId);
+  }
+
+  getCoachProfilePicture(
+    userId: string,
+    httpOptions: { headers: HttpHeaders }
+  ) {
+    return this.http.get<any>(
+      BACKEND_API + "/files/profile-picture/" + userId,
+      httpOptions
+    );
   }
 
   getCoachUpdateListener() {

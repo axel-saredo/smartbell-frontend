@@ -39,7 +39,6 @@ export class AuthService {
   }
 
   createUser(user: UserData) {
-    debugger;
     return this.http
       .post(BACKEND_URL + "/signup", user, { responseType: "text" })
       .subscribe(
@@ -70,23 +69,27 @@ export class AuthService {
 
             this.saveAuthData(token, this.userId);
 
-            const httpOptions = {
-              headers: new HttpHeaders({
-                "Content-Type": "image/jpeg",
-                Authorization: `Bearer ${token}`
-              })
-            };
+            const imageExists = Boolean(image.name);
 
-            const userData = new FormData();
-            userData.append("file", image, image.name);
+            if (imageExists) {
+              const httpOptions = {
+                headers: new HttpHeaders({
+                  "Content-Type": "image/jpeg",
+                  Authorization: `Bearer ${token}`
+                })
+              };
 
-            this.http
-              .put<any>(
-                BACKEND_API + "/files/profile-picture/" + this.userId,
-                userData,
-                httpOptions
-              )
-              .subscribe(response => console.log("It worked!"));
+              const userData = new FormData();
+              userData.append("file", image, image.name);
+
+              this.http
+                .put<any>(
+                  BACKEND_API + "/files/profile-picture/" + this.userId,
+                  userData,
+                  httpOptions
+                )
+                .subscribe(response => console.log("It worked!"));
+            }
 
             this.router.navigate(["/"]);
           }

@@ -98,13 +98,21 @@ export class SignupComponent implements OnInit, OnDestroy {
       const descriptionIsInvalid =
         description.value === "" || typeof description.value !== "string";
 
-      if (displayNameIsInvalid || cbuIsInvalid || descriptionIsInvalid) {
+      if (displayNameIsInvalid) {
         displayName.setErrors({
           invalid: true
         });
+
+        return false;
+      }
+      if (cbuIsInvalid) {
         cbu.setErrors({
           invalid: true
         });
+
+        return false;
+      }
+      if (descriptionIsInvalid) {
         description.setErrors({
           invalid: true
         });
@@ -120,10 +128,13 @@ export class SignupComponent implements OnInit, OnDestroy {
       const lastNameIsInvalid =
         lastName.value === "" || typeof lastName.value !== "string";
 
-      if (firstNameIsInvalid || lastNameIsInvalid) {
+      if (firstNameIsInvalid) {
         firstName.setErrors({ invalid: true });
-        lastName.setErrors({ invalid: true });
+        return false;
+      }
 
+      if (lastNameIsInvalid) {
+        lastName.setErrors({ invalid: true });
         return false;
       }
     }

@@ -7,12 +7,30 @@
   text-align: center;
 }
 
+.spinner::ng-deep circle {
+  stroke: #ff4848;
+}
+
 mat-spinner {
   margin: auto;
 }
 
 mat-paginator {
   margin-top: 1rem;
+}
+
+.profile-btn-container {
+  justify-content: flex-end;
+  display: flex;
+}
+
+button.mat-raised-button {
+  background: #ff4848;
+  color: white;
+}
+
+mat-expansion-panel-header {
+  font-weight: bold;
 }
 
 .coach-image {
@@ -22,4 +40,12 @@ mat-paginator {
 .coach-image img {
   width: 100%;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+}
+
+.coach-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 10;
+  -webkit-box-orient: vertical;
 }
