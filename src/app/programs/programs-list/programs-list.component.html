@@ -1,0 +1,31 @@
+<div class="container">
+  <h1 class="title">COMIENZA TU NUEVA RUTINA</h1>
+  <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>
+  <div *ngIf="programs.length > 0 && !isLoading" class="cards">
+    <mat-card *ngFor="let program of programs" class="card">
+      <a [routerLink]="['/program', program.id]" class="program">
+        <mat-card-title>
+          {{ program.title }}
+        </mat-card-title>
+        <div class="program-image">
+          <img src="{{ IMAGE_PATH }}{{ program.id }}" [alt]="program.title" />
+        </div>
+        <p class="program-description">
+          {{ program.description }}
+        </p>
+      </a>
+    </mat-card>
+  </div>
+  <p class="info-text mat-body-1" *ngIf="programs.length <= 0 && !isLoading">
+    Aun no hay programas disponibles!
+  </p>
+</div>
+<mat-paginator
+  [hidePageSize]="true"
+  [showFirstLastButtons]="true"
+  [length]="totalPrograms"
+  [pageSize]="programsPerPage"
+  [pageSizeOptions]="pageSizeOptions"
+  (page)="onChangedPage($event)"
+  *ngIf="programs.length > 0"
+></mat-paginator>

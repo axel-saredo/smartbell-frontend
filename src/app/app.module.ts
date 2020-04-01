@@ -11,7 +11,7 @@ import { AuthInterceptor } from "./auth/auth-interceptor";
 import { ErrorInterceptor } from "./error-interceptor";
 import { ErrorComponent } from "./error/error.component";
 import { AngularMaterialModule } from "./angular-material.module";
-import { CoachesModule } from "../app/coaches/coaches.module";
+import { ProgramsModule } from "./programs/programs.module";
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, ErrorComponent],
@@ -21,11 +21,7 @@ import { CoachesModule } from "../app/coaches/coaches.module";
     BrowserAnimationsModule,
     HttpClientModule,
     AngularMaterialModule,
-    CoachesModule
-  ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    ProgramsModule
   ],
   bootstrap: [AppComponent],
   entryComponents: [ErrorComponent]
