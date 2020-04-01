@@ -1,13 +1,12 @@
 import { NgModule } from "@angular/core";
-import { CoachesListComponent } from "./coaches-list/coaches-list.component";
-import { PostCreateComponent } from "./post-create/post-create.component";
+import { ProgramsListComponent } from "./programs-list/programs-list.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { AngularMaterialModule } from "../angular-material.module";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 
 @NgModule({
-  declarations: [PostCreateComponent, CoachesListComponent],
+  declarations: [ProgramsListComponent],
 
   imports: [
     CommonModule,
@@ -16,4 +15,4 @@ import { RouterModule } from "@angular/router";
     RouterModule
   ]
 })
-export class CoachesModule {}
+export class ProgramsModule {}

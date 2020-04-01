@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 
@@ -13,8 +13,11 @@ const BACKEND_API = environment.apiUrl;
 @Injectable({ providedIn: "root" })
 export class AuthService {
   private isAuthenticated = false;
+
   private token: string;
+
   private userId: string;
+
   private authStatusListener = new Subject<boolean>();
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -41,7 +44,6 @@ export class AuthService {
       .subscribe(
         () => {
           this.login(user.email, user.password, user.image);
-          this.router.navigate(["/auth/login"]);
         },
         error => {
           this.authStatusListener.next(false);
@@ -52,25 +54,43 @@ export class AuthService {
   login(email: string, password: string, image?: File) {
     this.http
       .post<any>(BACKEND_URL + "/login", {
-        email: email,
-        password: password
+        email,
+        password
       })
       .subscribe(
         response => {
           const token = response.token;
           this.token = token;
+
           if (token) {
             this.isAuthenticated = true;
             this.userId = response.user.id;
             this.authStatusListener.next(true);
 
             this.saveAuthData(token, this.userId);
-            const userData = new FormData();
-            userData.append("file", image);
-            this.http.put<any>(
-              BACKEND_API + "/files/profile-picture/" + this.userId,
-              image
-            );
+
+            const imageExists = Boolean(image);
+
+            if (imageExists) {
+              const httpOptions = {
+                headers: new HttpHeaders({
+                  "Content-Type": "image/jpeg",
+                  Authorization: `Bearer ${token}`
+                })
+              };
+
+              const userData = new FormData();
+              userData.append("file", image, image.name);
+
+              this.http
+                .put<any>(
+                  BACKEND_API + "/files/profile-picture/" + this.userId,
+                  userData,
+                  httpOptions
+                )
+                .subscribe(response => console.log("It worked!"));
+            }
+
             this.router.navigate(["/"]);
           }
         },
@@ -117,8 +137,8 @@ export class AuthService {
       return;
     }
     return {
-      token: token,
-      userId: userId
+      token,
+      userId
     };
   }
 }

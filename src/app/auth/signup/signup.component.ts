@@ -5,7 +5,7 @@ import { AuthService } from "../auth.service";
 import { Subscription } from "rxjs";
 import { UserData } from "../user-data.model";
 import { CoachData } from "../coach-data.model";
-import { mimeType } from "src/app/coaches/post-create/mime-type.validator";
+import { mimeType } from "src/app/utils/mime-type.validator";
 
 @Component({
   templateUrl: "./signup.component.html",
@@ -13,9 +13,13 @@ import { mimeType } from "src/app/coaches/post-create/mime-type.validator";
 })
 export class SignupComponent implements OnInit, OnDestroy {
   isLoading = false;
+
   isChecked = false;
+
   form: FormGroup;
+
   fileIsTooBig = false;
+
   imagePreview: string;
 
   private authStatus: Subscription;
@@ -70,6 +74,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         lastName: this.form.value.lastName,
         email: this.form.value.email,
         password: this.form.value.password,
+        image: this.form.value.image,
         coachData: coachDataExists ? coachData : undefined
       };
 
@@ -93,13 +98,21 @@ export class SignupComponent implements OnInit, OnDestroy {
       const descriptionIsInvalid =
         description.value === "" || typeof description.value !== "string";
 
-      if (displayNameIsInvalid || cbuIsInvalid || descriptionIsInvalid) {
+      if (displayNameIsInvalid) {
         displayName.setErrors({
           invalid: true
         });
+
+        return false;
+      }
+      if (cbuIsInvalid) {
         cbu.setErrors({
           invalid: true
         });
+
+        return false;
+      }
+      if (descriptionIsInvalid) {
         description.setErrors({
           invalid: true
         });
@@ -115,10 +128,13 @@ export class SignupComponent implements OnInit, OnDestroy {
       const lastNameIsInvalid =
         lastName.value === "" || typeof lastName.value !== "string";
 
-      if (firstNameIsInvalid || lastNameIsInvalid) {
+      if (firstNameIsInvalid) {
         firstName.setErrors({ invalid: true });
-        lastName.setErrors({ invalid: true });
+        return false;
+      }
 
+      if (lastNameIsInvalid) {
+        lastName.setErrors({ invalid: true });
         return false;
       }
     }

@@ -1,0 +1,134 @@
+:host {
+  display: block;
+  margin-top: 1rem;
+}
+
+.info-text {
+  text-align: center;
+  color: white;
+}
+
+.title {
+  font-size: 40px;
+  color: white;
+}
+
+.spinner::ng-deep circle {
+  stroke: #ff4848;
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+a:visited {
+  color: black;
+}
+a:hover {
+  color: black;
+}
+a:active {
+  color: none;
+}
+
+.cards {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-gap: 1rem;
+}
+
+.card {
+  margin-top: 10px;
+  transition: margin 0.5s ease-out;
+  -webkit-transition: margin 0.5s ease-out;
+  -moz-transition: margin 0.5s ease-out;
+  -o-transition: margin 0.5s ease-out;
+}
+
+.card:hover {
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.card:hover img {
+  filter: brightness(80%);
+}
+
+@media (min-width: 600px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .title {
+    font-size: 80px;
+  }
+}
+
+@media (min-width: 900px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .title {
+    font-size: 100px;
+  }
+}
+
+.program-image {
+  width: 100%;
+}
+
+.program-image img {
+  filter: brightness(100%);
+  width: 100%;
+  height: 15vw;
+  object-fit: cover;
+}
+
+.program-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 10;
+  -webkit-box-orient: vertical;
+}
+
+mat-paginator {
+  margin-top: 1rem;
+  background-color: white;
+  color: black;
+  opacity: 50%;
+}
+
+::ng-deep .mat-paginator-range-label {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+::ng-deep body .cdk-overlay-container .mat-tooltip {
+  background-color: transparent;
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  color: transparent;
+}
+
+.container {
+  animation: 1.5s ease 0s normal forwards 1 fadein;
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+  66% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
