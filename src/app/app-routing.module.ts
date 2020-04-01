@@ -1,25 +1,27 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from "@angular/core";
+import { RouterModule, Routes } from "@angular/router";
 
-import { AuthGuard } from './auth/auth.guard';
-import { CoachesListComponent } from './coaches/coaches-list/coaches-list.component';
-import { COACHES_ROUTES } from './coaches/router';
+import { AuthGuard } from "./auth/auth.guard";
+import { ProgramsListComponent } from "./programs/programs-list/programs-list.component";
+import { PROGRAMS_ROUTES } from "./programs/router";
+import { ProgramDetailComponent } from "./programs/program-detail/program-detail.component";
 
 const routes: Routes = [
-  { path: '', component: CoachesListComponent, },
+  { path: "", component: ProgramsListComponent },
   {
-    path    : 'coach',
-    children: COACHES_ROUTES,
+    path: "program/:id",
+    component: ProgramDetailComponent,
+    children: PROGRAMS_ROUTES
   },
   {
-    path        : 'auth',
-    loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
+    path: "auth",
+    loadChildren: () => import("./auth/auth.module").then(m => m.AuthModule)
   }
 ];
 
 @NgModule({
-  imports  : [RouterModule.forRoot(routes)],
-  exports  : [RouterModule],
-  providers: [AuthGuard],
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+  providers: [AuthGuard]
 })
 export class AppRoutingModule {}

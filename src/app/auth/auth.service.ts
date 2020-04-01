@@ -69,7 +69,7 @@ export class AuthService {
 
             this.saveAuthData(token, this.userId);
 
-            const imageExists = Boolean(image.name);
+            const imageExists = Boolean(image);
 
             if (imageExists) {
               const httpOptions = {
