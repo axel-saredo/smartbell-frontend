@@ -1,0 +1,20 @@
+.background {
+    background-color: rgba(0, 0, 0, 0.205);
+    top: 0;
+    left: 0;
+    position: absolute;
+    height: 100%;
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner::ng-deep circle {
+    stroke: #ff4848;
+}
+
+::ng-deep body {
+    overflow: hidden !important;
+    overflow: -moz-hidden-unscrollable;
+}

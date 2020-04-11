@@ -1,5 +1,5 @@
+<app-spinner-background *ngIf="isLoading"></app-spinner-background>
 <mat-card>
-  <mat-spinner *ngIf="isLoading" class="spinner"></mat-spinner>
   <form [formGroup]="form" (submit)="onSignup()" *ngIf="!isLoading">
     <button
       type="button"

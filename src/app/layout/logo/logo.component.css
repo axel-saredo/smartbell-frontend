@@ -1,0 +1,40 @@
+#logo {
+    fill: white;
+    width: 40px;
+    height: 40px;
+    display: table-cell;
+    height: 60px;
+    transform: rotate(45deg);
+    vertical-align: middle;
+    display: table-cell;
+    cursor: pointer;
+}
+.background {
+    width: 70px;
+    height: 70px;
+    background: #ce2323;
+    /* box-shadow: 0px 17px 10px -10px rgba(0,0,0,0.4); */
+    /* Rotate */
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    /* Rotate Origin */
+    -webkit-transform-origin: 0 100%;
+    -moz-transform-origin: 0 100%;
+    -ms-transform-origin: 0 100%;
+    -o-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    position: relative;
+    overflow: hidden; 
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    left:0;
+    right:0;
+    top: 27px;
+    position: absolute;
+}

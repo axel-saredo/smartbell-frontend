@@ -1,0 +1,41 @@
+.info-container {
+    display: flex;
+    height: 50vh;
+    overflow: hidden;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.info {
+    padding: 10px 20px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.info-container #profilePicture {
+    max-height: 240px;
+    margin: 30px;
+    float: right;
+    border-radius: 100%;
+}
+
+
+.info-container .info #displayName {
+    width: fit-content;
+    border-bottom: 2px solid black;
+}
+
+
+.info-container .info #description {
+    padding: 2px 0;
+    font-style: italic;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}

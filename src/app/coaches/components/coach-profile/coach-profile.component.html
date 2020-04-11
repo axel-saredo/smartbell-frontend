@@ -1,0 +1,12 @@
+  <div class="info-container clearfix">
+    <div class="info" >
+      <h1 id="displayName">{{coachData.displayName}}</h1>
+      <p id="description">{{coachData.description}}</p>
+    </div>
+    
+    <img *ngIf="profilePictureUrl" 
+    [src]="profilePictureUrl" 
+    alt="Coach Profile Picture"
+    id="profilePicture"
+    >
+</div>

@@ -1,0 +1,7 @@
+button.mat-raised-button {
+    background: #ff4343;
+    color: white;
+    margin-top: 1%;
+    box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.75);
+  }
+

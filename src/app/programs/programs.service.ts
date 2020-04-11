@@ -1,65 +1,51 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Subject } from "rxjs";
-import { map } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
-import { environment } from "../../environments/environment";
-import { Program } from "./program.model";
+import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
+import { Program } from './program.model';
+import { FindAndCount } from '../utils/types';
 
 const BACKEND_API = environment.apiUrl;
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root', })
 export class ProgramsService {
-  private programs: Program[] = [];
-
-  private programsUpdated = new Subject<{
-    programs: Program[];
-    programCount: number;
-  }>();
 
   constructor(private http: HttpClient) {}
 
-  getPrograms(programsPerPage: number, page: number) {
+  getPrograms(programsPerPage: number, page: number): Observable<FindAndCount<Program>> {
     const offset = this.calculateOffset(programsPerPage, page);
     const queryParams = `?limit=${programsPerPage}&offset=${offset}`;
-    this.http
-      .get<{ count: number; rows: any[] }>(
-        BACKEND_API + "/program" + queryParams
-      )
-      .pipe(
-        map(programsData => {
-          return {
-            programs: programsData.rows.map((program: Program) => {
-              return {
-                id: program.id,
-                title: program.title,
-                description: program.description,
-                pictureId: program.pictureId
-              };
-            }),
-            maxPrograms: programsData.count
-          };
-        })
-      )
-      .subscribe(transformedProgramData => {
-        this.programs = transformedProgramData.programs;
-        this.programsUpdated.next({
-          programs: [...this.programs],
-          programCount: transformedProgramData.maxPrograms
-        });
-      });
+    const url = BACKEND_API + '/program' + queryParams;
+    return this.http.get<FindAndCount<Program>>(url);
   }
 
-  getProgram(programId: string) {
-    return this.http.get<any>(BACKEND_API + "/program/" + programId);
+  getProgram(programId: string): Observable<Program> {
+    const url = `${BACKEND_API}'/program/${programId}`;
+    return this.http.get<any>(url);
   }
 
-  getProgramUpdateListener() {
-    return this.programsUpdated.asObservable();
-  }
-
-  calculateOffset(programsPerPage: number, page: number) {
+  calculateOffset(programsPerPage: number, page: number): number {
     const offset = programsPerPage * (page - 1);
     return offset;
+  }
+
+  createProgram(coachId: string, programData: Partial<Program>): Observable<Program> {
+    const url = `${BACKEND_API}/coach/${coachId}/program`;
+    return this.http.post<Program>(url, programData);
+  }
+
+  uploadProgramPicture(programId: string, image: File): Observable<Object> {
+    const url = `${BACKEND_API}/program/${programId}/picture`;
+    const formData = new FormData();
+    formData.append('file', image, image.name);
+    return this.http.put(url, formData);
+  }
+
+  uploadProgramPreview(programId: string, video: File): Observable<Object> {
+    const url = `${BACKEND_API}/program/${programId}/preview`;
+    const formData = new FormData();
+    formData.append('file', video, video.name);
+    return this.http.put(url, formData);
   }
 }

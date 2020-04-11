@@ -17,5 +17,15 @@ ul {
 }
 
 .mat-toolbar.mat-primary {
-  background: #ce2323;
+  background: #ff4848;
+}
+
+app-logo {
+  cursor: pointer;
+}
+
+.container {
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
 }

@@ -1,0 +1,22 @@
+<app-spinner-background *ngIf="isLoading"></app-spinner-background>
+<div class="container">
+    <h1 class="title">COMIENZA TU NUEVA RUTINA</h1>
+    <div *ngIf="programs.length > 0 && !isLoading; else noPrograms">
+        <app-programs-list [programs]=programs></app-programs-list>
+    </div>
+
+    <mat-paginator
+    [hidePageSize]="true"
+    [showFirstLastButtons]="true"
+    [length]="totalPrograms"
+    [pageSize]="programsPerPage"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="onChangedPage($event)"
+    *ngIf="programs.length > 0"
+    ></mat-paginator>
+    <ng-template #noPrograms>
+        <p class="info-text mat-body-1">
+        Aun no hay programas disponibles!
+        </p>
+    </ng-template>
+</div>

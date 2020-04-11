@@ -1,0 +1,15 @@
+<div class="cards">
+  <mat-card *ngFor="let program of programs" class="card">
+    <a [routerLink]="['/program', program.id]" class="program">
+      <div class="program-image">
+        <img src="{{ IMAGE_PATH }}{{ program.id }}" [alt]="program.title" />
+      </div>
+      <div class="content">
+        <mat-card-title>
+          {{ program.title }}
+        </mat-card-title>
+        <p class="instructor">Por {{program.coach.displayName}}</p>
+      </div>
+    </a>
+  </mat-card>
+</div>

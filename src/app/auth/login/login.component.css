@@ -2,14 +2,6 @@ mat-form-field {
   width: 100%;
 }
 
-mat-spinner {
-  margin: auto;
-}
-
-.spinner::ng-deep circle {
-  stroke: #ff4848;
-}
-
 button.mat-raised-button {
   background: #ff4848;
   color: white;

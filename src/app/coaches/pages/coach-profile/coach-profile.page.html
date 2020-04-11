@@ -1,0 +1,9 @@
+  <app-coach-profile
+      *ngIf="coachData"
+      [coachData]="coachData"
+  ></app-coach-profile>
+
+  <button mat-raised-button color="accent"  *ngIf="isCurrentUserProfile()" (click)="navigateToAddProgram()">
+      NUEVO PROGRAMA
+    </button>
+  <app-programs-list [programs]="programs"></app-programs-list>

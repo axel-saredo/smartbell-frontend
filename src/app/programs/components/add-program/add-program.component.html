@@ -1,0 +1,56 @@
+<div class="container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+    <div class="form-group">
+      <label for="name">Nombre</label>
+      <input formControlName="title" type="text" class="form-control" id="name" >
+    </div>
+
+    <div class="form-group">
+      <label for="description">Descripcion</label>
+      <textarea formControlName="description" class="form-control" id="description" rows="10" cols="50"
+        ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="picture">Imagen</label>
+      <input 
+        formControlName="image" 
+        type="file" 
+        class="form-control" 
+        id="picture" 
+        accept='image/*'
+        (change)="handleImageInput($event.target.files)"
+        >
+    </div>
+
+    <div class="form-group">
+      <label for="previewVideo">Vista previa del curso</label>
+      <input 
+        formControlName="preview" 
+        type="file" 
+        class="form-control" 
+        id="preview "
+        accept='video/*'
+        (change)="handleVideoInput($event.target.files)"
+        >
+    </div>
+
+    <button mat-raised-button color="accent" [disabled]="form.invalid" type="submit">
+      CREAR
+    </button>
+  </form>
+
+  <div class="previews" *ngIf="imageWasAdded || videoWasAdded">
+
+    <div class="image-preview" *ngIf="imageWasAdded">
+      <h1>Imagen</h1>
+      <img [src]="imageString">
+    </div>
+
+    <div class="preview-video-preview" *ngIf="videoWasAdded">
+      <h1>Vista previa</h1>
+      <video controls [src]="videoString"></video>
+    </div>
+
+  </div>
+</div>

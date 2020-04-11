@@ -1,0 +1,11 @@
+<h1>Nuevo Programa</h1>
+
+<app-add-program 
+    [coachId]="coachId"
+    (creationSucceeded)="handleCreationSucceeded()"
+    (creationFailed)="handleCreationFailed()"
+    (filesFailed)="handleFilesFailed()"
+    (loading)="setLoading($event)"
+></app-add-program>
+
+<app-spinner-background *ngIf="loading"></app-spinner-background>

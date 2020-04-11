@@ -1,22 +1,22 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { Subject } from "rxjs";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
 
-import { UserData } from "./user-data.model";
+import { UserData } from './user-data.model';
 
-import { environment } from "../../environments/environment";
+import { environment } from '../../environments/environment';
 
 const BACKEND_URL = environment.authUrl;
 const BACKEND_API = environment.apiUrl;
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root', })
 export class AuthService {
   private isAuthenticated = false;
 
   private token: string;
 
-  private userId: string;
+  private user: UserData;
 
   private authStatusListener = new Subject<boolean>();
 
@@ -30,74 +30,43 @@ export class AuthService {
     return this.isAuthenticated;
   }
 
-  getUserId() {
-    return this.userId;
+  getUser() {
+    return this.user;
   }
 
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
   }
 
-  createUser(user: UserData) {
+  createUser(user: UserData): Promise<any> {
     return this.http
-      .post(BACKEND_URL + "/signup", user, { responseType: "text" })
-      .subscribe(
-        () => {
-          this.login(user.email, user.password, user.image);
-        },
-        error => {
-          this.authStatusListener.next(false);
-        }
-      );
+      .post(BACKEND_URL + '/signup', user, { responseType: 'text', }).toPromise();
   }
 
-  login(email: string, password: string, image?: File) {
-    this.http
-      .post<any>(BACKEND_URL + "/login", {
+  // TODO: Type return type
+  login(email: string, password: string): Promise<any> {
+    return this.http
+      .post<any>(BACKEND_URL + '/login', {
         email,
-        password
+        password,
+      }).toPromise()
+      .then((response) => {
+        const token = response.token;
+        this.token = token;
+
+        if (token) {
+          this.isAuthenticated = true;
+          this.user = response.user;
+          this.authStatusListener.next(true);
+          this.saveAuthData(token);
+        }
+        return response.user;
       })
-      .subscribe(
-        response => {
-          const token = response.token;
-          this.token = token;
-
-          if (token) {
-            this.isAuthenticated = true;
-            this.userId = response.user.id;
-            this.authStatusListener.next(true);
-
-            this.saveAuthData(token, this.userId);
-
-            const imageExists = Boolean(image);
-
-            if (imageExists) {
-              const httpOptions = {
-                headers: new HttpHeaders({
-                  "Content-Type": "image/jpeg",
-                  Authorization: `Bearer ${token}`
-                })
-              };
-
-              const userData = new FormData();
-              userData.append("file", image, image.name);
-
-              this.http
-                .put<any>(
-                  BACKEND_API + "/files/profile-picture/" + this.userId,
-                  userData,
-                  httpOptions
-                )
-                .subscribe(response => console.log("It worked!"));
-            }
-
-            this.router.navigate(["/"]);
-          }
-        },
-        error => {
+      .catch((
+        (error) => {
           this.authStatusListener.next(false);
         }
-      );
+      ));
   }
 
   autoAuthUser() {
@@ -107,7 +76,7 @@ export class AuthService {
     }
     this.token = authInformation.token;
     this.isAuthenticated = true;
-    this.userId = authInformation.userId;
+    this.user = authInformation.user;
     this.authStatusListener.next(true);
   }
 
@@ -116,29 +85,49 @@ export class AuthService {
     this.isAuthenticated = false;
     this.authStatusListener.next(false);
     this.clearAuthData();
-    this.userId = null;
-    this.router.navigate(["/"]);
+    this.user = null;
+    this.router.navigate(['/']);
   }
 
-  private saveAuthData(token: string, userId: string) {
-    localStorage.setItem("token", token);
-    localStorage.setItem("userId", userId);
+  private saveAuthData(token: string) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(this.user));
   }
 
   private clearAuthData() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 
   private getAuthData() {
-    const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId");
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
     if (!token) {
       return;
     }
     return {
       token,
-      userId
+      user,
     };
+  }
+
+  // TODO: This should be in an UserService
+  createProfilePicture(id: string, image: File): Promise<void> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'image/jpeg',
+        Authorization : `Bearer ${this.token}`,
+      }),
+    };
+
+    const userData = new FormData();
+    userData.append('file', image, image.name);
+    const URL = BACKEND_API + '/files/profile-picture/' + id;
+    return this.http
+      .put<any>(
+        URL,
+        userData,
+        httpOptions
+      ).toPromise();
   }
 }
